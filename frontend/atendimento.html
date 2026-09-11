@@ -5,8 +5,27 @@
 <div class="container">
 <h2>Atendimento</h2>
 
-<input id="nome" placeholder="Nome">
-<input id="cpf" placeholder="CPF">
+<input id="nome" placeholder="Nome completo">
+<input id="documento" placeholder="CPF/RG ou outro documento">
+<input id="dataNascimento" type="date" placeholder="Data de nascimento">
+<select id="sexo">
+  <option value="">Selecione o sexo</option>
+  <option value="M">Masculino</option>
+  <option value="F">Feminino</option>
+  <option value="O">Outro</option>
+</select>
+<input id="nomeMae" placeholder="Nome da mãe">
+<select id="estadoCivil">
+  <option value="">Estado civil</option>
+  <option value="solteiro">Solteiro(a)</option>
+  <option value="casado">Casado(a)</option>
+  <option value="divorciado">Divorciado(a)</option>
+  <option value="viuvo">Viúvo(a)</option>
+</select>
+<input id="endereco" placeholder="Endereço">
+<input id="telefone" placeholder="Telefone">
+<input id="email" type="email" placeholder="E-mail">
+<input id="contatoEmergencia" placeholder="Contato de emergência">
 
 <select id="tipo">
   <option>Convenio</option>
@@ -20,13 +39,21 @@
 
 <script>
 function cadastrar(){
- fetch("/atendimento",{
+ fetch("http://localhost:3000/atendimento",{
   method:"POST",
   headers:{"Content-Type":"application/json"},
   body: JSON.stringify({
-    nome: nome.value,
-    cpf: cpf.value,
-    tipo: tipo.value
+    nome: document.getElementById('nome').value,
+    documento: document.getElementById('documento').value,
+    dataNascimento: document.getElementById('dataNascimento').value,
+    sexo: document.getElementById('sexo').value,
+    nomeMae: document.getElementById('nomeMae').value,
+    estadoCivil: document.getElementById('estadoCivil').value,
+    endereco: document.getElementById('endereco').value,
+    telefone: document.getElementById('telefone').value,
+    email: document.getElementById('email').value,
+    contatoEmergencia: document.getElementById('contatoEmergencia').value,
+    tipo: document.getElementById('tipo').value
   })
  });
  alert("Paciente enviado para triagem");

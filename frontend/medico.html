@@ -51,17 +51,25 @@
 
 <div class="container">
 
+
   <!-- Cabeçalho com botão da TV -->
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+  <div style="display:flex; justify-content:space-between;
+   align-items:center;
+   margin-bottom:20px;">
     <h2 style="margin:0;">🩺 Painel Médico</h2>
-    <button class="btn-abrir-tv" onclick="window.open('tv.html','_blank')">📺 Abrir Tela da TV</button>
+    <button class="btn-abrir-tv" 
+    onclick="window.open('tv.html','_blank')">
+      📺 Abrir Tela da TV</button>
   </div>
 
-  <!-- Campo criado para informar o consultório e chamar o paciente na TV -->
+  <!-- Campo criado para informar o consultório e chamar
+    o paciente na TV -->
   <div class="consultorio-input">
     <label>Meu Consultório:</label>
     <input type="text" id="consultorio-num" value="01">
-    <span style="color:#666; font-size:13px;">Este número será exibido na TV ao chamar o paciente.</span>
+    <span style="color:#666; font-size:13px;">Este
+       número será exibido na TV ao chamar o paciente.
+      </span>
   </div>
 
   <div id="triagens"></div>
@@ -80,6 +88,7 @@
   <textarea id="obs" placeholder="Observações"></textarea>
 
   <button onclick="salvar()">Salvar</button>
+  <button onclick="gerarAlta()" style="background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">Gerar Alta (PDF)</button>
 
 </div>
 
@@ -184,6 +193,60 @@ function salvar() {
     document.getElementById("medicacao").value = "";
     document.getElementById("obs").value = "";
   });
+}
+
+function gerarAlta() {
+  const paciente = document.getElementById("paciente").value;
+  const diagnostico = document.getElementById("diagnostico").value;
+  const medicacao = document.getElementById("medicacao").value;
+  const obs = document.getElementById("obs").value;
+
+  if (!paciente) { alert("Selecione um paciente clicando em Atender."); return; }
+
+  const dataAtual = new Date().toLocaleDateString("pt-BR");
+
+  const janelaAlta = window.open('', '_blank', 'width=800,height=600');
+  janelaAlta.document.write(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Termo de Alta - ${paciente}</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 40px; line-height: 1.6; }
+          h1 { text-align: center; color: #333; }
+          .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #ccc; padding-bottom: 20px; }
+          .content p { font-size: 16px; margin: 10px 0; }
+          .assinatura { margin-top: 80px; text-align: center; }
+          .linha-assinatura { border-top: 1px solid #000; width: 300px; margin: 0 auto 10px auto; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>TERMO DE ALTA MÉDICA</h1>
+          <p>Hospital Sentinela</p>
+        </div>
+        <div class="content">
+          <p><strong>Data:</strong> ${dataAtual}</p>
+          <p><strong>Paciente:</strong> ${paciente}</p>
+          <p><strong>Diagnóstico:</strong> ${diagnostico || 'Não informado'}</p>
+          <p><strong>Medicação Prescrita:</strong> ${medicacao || 'Nenhuma'}</p>
+          <p><strong>Observações:</strong> ${obs || 'Nenhuma'}</p>
+          <br><br>
+          <p>Atesto para os devidos fins que o paciente acima qualificado recebeu atendimento médico nesta data e encontra-se de alta médica, devendo seguir as recomendações e prescrições informadas.</p>
+        </div>
+        <div class="assinatura">
+          <div class="linha-assinatura"></div>
+          <p>Assinatura e Carimbo do Médico</p>
+        </div>
+      </body>
+    </html>
+  `);
+  janelaAlta.document.close();
+  
+  // Aguardar um momento para garantir que o conteúdo foi carregado antes de imprimir
+  setTimeout(() => {
+    janelaAlta.print();
+  }, 500);
 }
 
 carregar();
