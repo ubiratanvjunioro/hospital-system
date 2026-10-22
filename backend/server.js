@@ -49,6 +49,60 @@ app.post("/login", (req, res) => {
   res.json(user);
 });
 
+// ============ GERENCIAMENTO DE USUÁRIOS (ADMIN) ============
+app.get("/usuarios", (req, res) => {
+  const db = readDB();
+  res.json(db.usuarios || []);
+});
+
+app.post("/usuarios", (req, res) => {
+  const db = readDB();
+  const { usuario, senha, tipo, nome } = req.body;
+
+  if (!usuario || !senha || !tipo) {
+    return res.status(400).json({ erro: "Usuário, senha e setor são obrigatórios." });
+  }
+
+  const jaExiste = (db.usuarios || []).some(u => u.usuario && u.usuario.toLowerCase() === usuario.trim().toLowerCase());
+  if (jaExiste) {
+    return res.status(400).json({ erro: "Já existe um usuário com este login." });
+  }
+
+  const novoUsuario = {
+    id: Date.now(),
+    usuario: usuario.trim(),
+    senha: senha,
+    tipo: tipo,
+    nome: nome && nome.trim() ? nome.trim() : usuario.trim(),
+    createdAt: new Date()
+  };
+
+  if (!db.usuarios) db.usuarios = [];
+  db.usuarios.push(novoUsuario);
+  writeDB(db);
+
+  res.status(201).json(novoUsuario);
+});
+
+app.delete("/usuarios/:login", (req, res) => {
+  const db = readDB();
+  const login = req.params.login;
+
+  if (login.toLowerCase() === "admin") {
+    return res.status(400).json({ erro: "O usuário admin principal não pode ser removido." });
+  }
+
+  const index = (db.usuarios || []).findIndex(u => u.usuario && u.usuario.toLowerCase() === login.toLowerCase());
+  if (index === -1) {
+    return res.status(404).json({ erro: "Usuário não encontrado." });
+  }
+
+  const removido = db.usuarios.splice(index, 1);
+  writeDB(db);
+
+  res.json({ mensagem: "Usuário removido com sucesso.", usuario: removido[0] });
+});
+
 // ATENDIMENTO - cadastrar paciente
 app.post("/atendimento", (req, res) => {
   const db = readDB();
@@ -186,8 +240,7 @@ app.get("/medicacoes", (req, res) => {
   res.json(db.consultas);
 });
 
-// START
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🏥 Hospital Pro rodando na porta ${PORT}`);
+  console.log(`🏥 Hospital Pro rodando em: http://localhost:${PORT}`);
 });

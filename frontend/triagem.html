@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Triagem</title>
 <link rel="stylesheet" href="style.css">
-
 <style>
   .btn-tv {
     background: #28a745;
@@ -16,7 +15,7 @@
     font-size: 14px;
     margin-left: 8px;
   }
-  .btn-tv:hover { background: #1e7e342f; }
+  .btn-tv:hover { background: #1e7e34; }
 
   .pacientes-fila {
     margin-bottom: 30px;
@@ -48,8 +47,7 @@
     border: 1px solid #dce4ff;
   }
   .fila-item strong { font-size: 15px; }
-  .fila-item small { color: #888; 
-    font-size: 12px; }
+  .fila-item small { color: #888; font-size: 12px; }
   .btn-abrir-tv {
     display: inline-block;
     background: #17a2b8;
@@ -61,8 +59,7 @@
     cursor: pointer;
     border: none;
   }
-  .btn-abrir-tv:hover { background:
-   #117a8b; }
+  .btn-abrir-tv:hover { background: #117a8b; }
 </style>
 </head>
 
@@ -70,36 +67,21 @@
 <div class="container">
 
   <!-- Cabeçalho com botão da TV -->
-  <div style="display:flex; justify-content:space-
-  between;
-   align-items:center; margin-bottom:20px;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
     <h2 style="margin:0;">🏥 Triagem Hospitalar</h2>
-    <button class="btn-abrir-tv" 
-    onclick="window.open('tv.html','_blank')">📺 
-    Abrir Tela da TV</button>
+    <button class="btn-abrir-tv" onclick="window.open('tv.html','_blank')">📺 Abrir Tela da TV</button>
   </div>
 
-  <!-- Fila de pacientes do Atendimento criada
-    para mostrar
-    quem pode ser chamado na TV -->
+  <!-- Fila de pacientes do Atendimento criada para mostrar quem pode ser chamado na TV -->
   <div class="pacientes-fila">
     <h3>
       Pacientes Cadastrados no Atendimento
-      <span>Clique em "Chamar na TV" para 
-        chamar ao guichê</span>
+      <span>Clique em "Chamar na TV" para chamar ao guichê</span>
     </h3>
     <div id="fila-pacientes">
-      <p style="color:#888; text-align:center;">Car
-        regando...</p>
+      <p style="color:#888; text-align:center;">Carregando...</p>
     </div>
-    <button onclick="carregarPacientes()"
-     style="margin-top:8px;
-     background:#6c757d; color:white;
-      border:none; padding:6px
-      12px; border-radius:4px; cursor:pointer;
-       font-size:13px;">🔄
-       Atualizar
-       lista</button>
+    <button onclick="carregarPacientes()" style="margin-top:8px; background:#6c757d; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:13px;">🔄 Atualizar lista</button>
   </div>
 
   <hr>
@@ -170,8 +152,7 @@ function carregarPacientes() {
     });
 }
 
-// Função criada para enviar o nome do paciente para a TV quando
-//  ele for chamado no guichê.
+// Função criada para enviar o nome do paciente para a TV quando ele for chamado no guichê.
 function chamarNaTV(nome) {
   fetch("/tv/chamar", {
     method: "POST",
